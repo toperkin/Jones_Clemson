@@ -27,6 +27,7 @@ cs_mean = pd.rolling_mean(cs, LENGTH_OF_ROLLING_MEAN, center=True)
 cs_mean = cs_mean.drop('wavelength')
 
 plt.figure(figsize=(12, 9))
+plt.xlabel('Seconds')
 plt.ylabel('Average signal intensity')
 ax = mg_mean.plot(label='mg', legend=True)
 oh_mean.plot(label='oh', legend=True, ax=ax)
