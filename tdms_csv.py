@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Feb 17 19:56:04 2015
-
-@author: tony
-"""
 from nptdms import TdmsFile
 
 
@@ -19,11 +14,21 @@ for i in range(len(newnames)):
     else:
         temp = newnames[i].split('/')
         newnames[i] = str(temp[-1])
+    if newnames[i] == "'Header and Wavelength'":
+        newnames[i] = 'wavelength'
+    if 'Grid' in newnames[i]:
+        temp2 = newnames[i].split('-')
+        temp3 = temp2[1].split("'")
+        temp4 = str(float(temp3[0])/1000)+'ms'
+        newnames[i] = temp4
 
 df.columns = newnames
 
 # remove any columns with no data
-df=df.dropna(axis=1, how='all')
+df = df.dropna(axis=1, how='all')
+
+# put the columns in the order corresponding to their shot number
+df = df.sort_index(axis=1)
 
 # we'll also remove the first ten rows
 df = df.drop(df.index[[range(10)]])
