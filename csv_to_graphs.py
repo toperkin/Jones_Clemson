@@ -27,11 +27,11 @@ cs_mean = pd.rolling_mean(cs, LENGTH_OF_ROLLING_MEAN, center=True)
 cs_mean = cs_mean.drop('wavelength')
 
 plt.figure(figsize=(12, 9))
-plt.ylabel('wavelength')
+plt.ylabel('Average signal intensity')
 ax = mg_mean.plot(label='mg', legend=True)
 oh_mean.plot(label='oh', legend=True, ax=ax)
 ag328_mean.plot(label='ag328', legend=True, ax=ax)
 ag338_mean.plot(label='ag338', legend=True, ax=ax)
 cs_mean.plot(label='cs', legend=True, ax=ax)
 
-plt.savefig('clogge_cap')
+plt.savefig('clogged_cap')

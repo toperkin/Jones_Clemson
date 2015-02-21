@@ -19,7 +19,7 @@ for i in range(len(newnames)):
     if 'Grid' in newnames[i]:
         temp2 = newnames[i].split('-')
         temp3 = temp2[1].split("'")
-        temp4 = str(float(temp3[0])/1000)+'ms'
+        temp4 = str((float(temp3[0])-1)/10)+'s'
         newnames[i] = temp4
 
 df.columns = newnames
