@@ -4,29 +4,29 @@ Created on Tue Feb 17 19:56:04 2015
 
 @author: tony
 """
-
 from nptdms import TdmsFile
-import numpy as np
-import pandas as pd
+
 
 tdms_file = TdmsFile("clogged capillary.tdms")
 
-fname_template = 'Grid Location # 1-{i}'
-channel = tdms_file.object('Header Info','Header and Wavelength')
-data = channel.data
-data[0:10]=[0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-wavelengths = np.asarray(data, dtype=float)
+df = tdms_file.as_dataframe()
 
-shots=np.vstack(tdms_file.object('Main Group', fname_template.format(i=i)).data for i in range(1, len(tdms_file.group_channels('Main Group'))+1))
-final = np.vstack((wavelengths,shots))
+# the column names are a bit rough by default.  we'll clean them up
+newnames = df.columns.values
+for i in range(len(newnames)):
+    if newnames[i] == '/':
+        newnames[i] = 'root'
+    else:
+        temp = newnames[i].split('/')
+        newnames[i] = str(temp[-1])
 
-#np.savetxt("clogged_cap.csv", final[:,10:].T, delimiter=",")
+df.columns = newnames
 
+# remove any columns with no data
+df=df.dropna(axis=1, how='all')
 
-fname_template = 'Shot{i}'
-header=[fname_template.format(i=i) for i in range(1, len(tdms_file.group_channels('Main Group'))+1)]
-header = ['wavelength']+header
+# we'll also remove the first ten rows
+df = df.drop(df.index[[range(10)]])
 
-df = pd.DataFrame(final[:,10:].T, columns=header)
-
+# we'll save this as a csv for fun
 df.to_csv('clogged_cap.csv')
